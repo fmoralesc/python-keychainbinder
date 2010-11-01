@@ -1,0 +1,42 @@
+python-keychainbinder
+=====================
+
+Example:
+
+	import gtk
+	import sys
+	from keychainbinder import bind_keychain, bind_keychainset
+
+	# EXAMPLE 1: mapping a function to a chord	
+	def test():
+		print "whoa!"
+	
+	bind_keychain("<Super>F-1-2", test)
+	
+	# EXAMPLE 2: binding a set of keys with a common root
+	
+	def answersname(func):
+		def ans_f():
+			print "calling", func.__name__.replace("_", " ")
+			func()
+		return ans_f
+	
+	@answersname
+	def choice_A(): pass
+	@answersname
+	def choice_B(): pass
+
+	# S-B-C-a calls choice_A, S-B-C-b calls choice_B
+	bind_keychainset("<Super>B-C", ["a", "b"], [choice_A, choice_B])
+
+	# EXAMPLE 3: binding a set of keys to a set of functions created on the fly,
+	# which is cleverer than defining every function beforehand.
+	
+	keys = [str(i) for i in range(10)]
+	funcs =  [lambda k=i: sys.stderr.write("Pressed <Super>V-" + str(k) + "\n") for i in range(10)]
+	
+	bind_keychainset("<Super>V", keys, funcs) 
+
+	gtk.main()
+
+(C) 2010 Felipe Morales
