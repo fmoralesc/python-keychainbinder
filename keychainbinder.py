@@ -38,7 +38,7 @@ def bind_keychainset(head, keys, callbacks, timeout=400):
 	"""
 	def bind_choices(keys, callbacks, timeout):
 		for (key, callback) in zip(keys, callbacks):
-			keybinder.bind(key, callback)
+			bind_keychain(key, callback, timeout)
 			gobject.timeout_add(timeout, lambda key=key: keybinder.unbind(key))
 
 	bind_keychain(head, lambda: bind_choices(keys, callbacks, timeout), timeout)
